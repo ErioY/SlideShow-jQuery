@@ -1,0 +1,89 @@
+<!--
+ * @Autor: ErioY
+ * @Date: 2019-10-01 14:06:38
+ * @Email: 1973545559@qq.com
+ * @Github: https://github.com/ErioY
+ * @LastEditors: ErioY
+ * @LastEditTime: 2019-10-01 14:52:19
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    #wrap {
+        width: 200px;
+        height: 30px;
+        border: 1px #000 solid;
+        margin: 100px auto;
+        position: relative;
+        overflow: hidden;
+    }
+    .nav {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    li {
+        width: 200px;
+        height: 30px;
+    }
+    a {
+        display: block;
+        height: 30px;
+        color: #000;
+        text-decoration: none;
+        text-align: left;
+        line-height: 30px;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <ul class="nav"></ul>
+    </div>
+    <script src = "jquery-1.10.1.min.js"></script>
+    <script src = "velocity.min.js"></script>
+    <script>
+    var arr = ["第一条新闻", "第二条新闻", "第三条新闻", "第四条新闻", "第五条新闻"];
+    // 创建 li 和 a 元素
+    arr.forEach(function (item) {
+        var oLi = $("<li>").appendTo($(".nav"));
+        $("<a href = '#'>").html(item).appendTo(oLi);
+    });
+    // 获取 a标签的高度
+    var liH = $("li").outerHeight();
+    // 为了实现无缝滚动，需要再拷贝一组 li和 a元素，然后再给 ul的高度赋值，值为所有 a标签的高度和
+    $(".nav").html($(".nav").html() + $(".nav").html()).css("height", liH * $("li").length);
+    // 循环计时器实现自动滚动
+    var timer = setInterval(scrollNews, 1500);
+    function scrollNews () {
+        $(".nav").velocity({
+            "top": "-=" + liH  // 实现向上滚动效果，向上为 "-"， 向下为 "+"
+        }, {
+            "duration": 700,
+            "complete": function () {
+                // 如果滚动到最后一条新闻，置 ul 的 top 为 0
+                if ($(".nav").position().top <= - $(".nav").outerHeight() / 2) {
+                    $(".nav").css("top", 0);
+                }
+            }
+        });
+    }
+    
+    $("#wrap").hover(function () {
+        clearInterval(timer);
+        $("a").css("color", "red");
+    }, function () {
+        $("a").css("color", "black");
+        timer = setInterval(scrollNews, 1500); // 鼠标移出后，开启定时器
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!--
+ * @Autor: ErioY
+ * @Date: 2019-10-01 13:41:52
+ * @Email: 1973545559@qq.com
+ * @Github: https://github.com/ErioY
+ * @LastEditors: ErioY
+ * @LastEditTime: 2019-10-01 14:59:57
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    #wrap {
+        width: 1600px;
+        height: 450px;
+        border: 1px #000 solid;
+        overflow: hidden;
+        margin: 100px auto;
+        position: relative;
+    }
+    #scroll {
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+    }
+    img {
+        width: 800px;
+        height: 450px;
+        float: left;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="scroll">
+            <img src="img/case_pic1.png" alt="">
+            <img src="img/case_pic2.png" alt="">
+            <img src="img/case_pic3.png" alt="">
+            <img src="img/case_pic4.png" alt="">
+            <img src="img/case_pic5.png" alt="">
+            <img src="img/case_pic6.png" alt="">
+        </div>
+    </div>
+    <script src = "jquery-1.10.1.min.js"></script>
+    <script src = "velocity.min.js"></script>
+    <script>
+    var imgW = $("img").outerWidth();
+    // 为实现最后一张图片切换到第一张图片，拷贝一组图片
+    $("#scroll").html($("#scroll").html() + $("#scroll").html()).css("width", imgW * $("img").length);
+    var timer = setInterval(scrollPage, 1500);
+    function scrollPage() {
+        $("#scroll").velocity({
+            "left": "-=" + imgW
+        }, {
+            "duration": 700,
+            "complete": function () {
+                // 判断是否到达最后一张图片
+                if ($("#scroll").position().left <= - $("#scroll").outerWidth() / 2) {
+                    $("#scroll").css("left", 0);
+                }
+            }
+        });
+        console.log($("#scroll").position().left, -$("#scroll").outerWidth() / 2);
+    }
+    
+    $("#wrap").hover(function () {
+        clearInterval(timer);
+    }, function () {
+        timer = setInterval(scrollPage, 1500);
+    });
+    </script>
+</body>
+</html>
